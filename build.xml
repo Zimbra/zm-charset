@@ -9,7 +9,7 @@
     </antcall>
   </target>
 
-  <target name="deploy" depends="jar">
+  <target name="deploy" depends="jar,set-dev-version">
     <ant dir="${server.dir}" target="stop-webserver" inheritAll="false"/>
     <copy todir="${common.jars.dir}">
       <fileset dir="${build.dir}" includes="${jar.file}" />
