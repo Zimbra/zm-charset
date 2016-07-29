@@ -1,14 +1,32 @@
-<project name="ZimbraCharset" default="jar">
+<project name="zm-charset" default="jar">
 
   <import file="../zm-zcs/ant-global.xml"/>
-  
-  <property name="jar.file" value="zimbra-charset.jar" />
   
   <target name="jar" depends="compile" description="Creates the jar file">
     <antcall target="zimbra-jar">
        <param name="implementation.title" value="Zimbra Charset"/>
        <param name="zimbra.extension.class" value="java.nio.charset.spi.CharsetProvider"/>
     </antcall>
+  </target>
+
+  <target name="deploy" depends="jar,set-dev-version">
+    <ant dir="${server.dir}" target="stop-webserver" inheritAll="false"/>
+    <copy todir="${common.jars.dir}">
+      <fileset dir="${build.dir}" includes="${jar.file}" />
+    </copy>
+    <copy todir="${jetty.endorsed.jars.dir}">
+      <fileset dir="${build.dir}" includes="${jar.file}" />
+    </copy>
+    <ant dir="${server.dir}" target="start-webserver" inheritAll="false"/>
+  </target>
+
+  <target name="undeploy">
+    <ant dir="${server.dir}" target="stop-webserver" inheritAll="false"/>
+    <delete>
+      <fileset dir="${common.jars.dir}" includes="zm-charset*.jar,zimbra-charset.jar"/>
+      <fileset dir="${jetty.endorsed.jars.dir}" includes="zm-charset*.jar,zimbra-charset.jar"/>
+	</delete>
+    <ant dir="${server.dir}" target="start-webserver" inheritAll="false"/>
   </target>
 
 </project>
