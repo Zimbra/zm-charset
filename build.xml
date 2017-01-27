@@ -3,9 +3,10 @@
   <import file="../zm-zcs/ant-global.xml"/>
   
   <target name="jar" depends="compile" description="Creates the jar file">
+    <mkdir dir="build/classes/META-INF/services"/>
+    <copy todir="build/classes/META-INF/services" file="conf/java.nio.charset.spi.CharsetProvider"/>
     <antcall target="zimbra-jar">
        <param name="implementation.title" value="Zimbra Charset"/>
-       <param name="zimbra.extension.class" value="java.nio.charset.spi.CharsetProvider"/>
     </antcall>
   </target>
 
